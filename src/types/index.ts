@@ -49,7 +49,7 @@ export interface CreateActivityRequest {
   price?: number
   duration?: string
   location?: string
-  imageUrls?: string[]
+  imageUrls: string[]
 }
 
 export interface UpdateActivityRequest extends CreateActivityRequest {
@@ -84,7 +84,7 @@ export interface CreateHotelRequest {
   imageUrl: string
   checkInTime?: string
   checkOutTime?: string
-  imageUrls?: string[]
+  imageUrls: string[]
 }
 
 export interface UpdateHotelRequest extends CreateHotelRequest {

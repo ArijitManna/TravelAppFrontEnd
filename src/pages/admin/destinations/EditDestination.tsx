@@ -30,11 +30,11 @@ export default function EditDestination() {
 
   const { fields: imageFields, append: appendImage, remove: removeImage } = useFieldArray({
     control,
-    name: 'imageUrls' as any,
-  })
+    // @ts-expect-error - react-hook-form does not support arrays of primitives properly
+    name: 'imageUrls',
+  }) as any
 
   const imageUrl = watch('imageUrl')
-  const imageUrls = watch('imageUrls')
 
   useEffect(() => {
     if (id) {
@@ -187,7 +187,7 @@ export default function EditDestination() {
                   </button>
                 </div>
                 <div className="space-y-2">
-                  {imageFields.map((field, index) => (
+                  {imageFields.map((field: any, index: number) => (
                     <div key={field.id} className="flex items-center space-x-2">
                       <input
                         type="url"

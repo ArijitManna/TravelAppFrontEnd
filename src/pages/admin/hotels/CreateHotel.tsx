@@ -19,10 +19,7 @@ export default function CreateHotel() {
     control,
   } = useForm<CreateHotelRequest>({
     defaultValues: {
-      images: [{
-        imageUrl: '',
-        caption: '',
-      }],
+      imageUrls: [''],
       checkInTime: '14:00',
       checkOutTime: '11:00',
     },
@@ -30,16 +27,16 @@ export default function CreateHotel() {
 
   const { fields: imageFields, append: appendImage, remove: removeImage } = useFieldArray({
     control,
-    name: 'images',
-  })
+    // @ts-expect-error - react-hook-form does not support arrays of primitives properly
+    name: 'imageUrls',
+  })  as any
 
   const imageUrl = watch('imageUrl')
-  const images = watch('images')
 
   const onSubmit = async (data: CreateHotelRequest) => {
     try {
-      // Clean up empty images
-      data.images = data.images.filter(img => img.imageUrl?.trim() !== '')
+      // Clean up empty image URLs
+      data.imageUrls = data.imageUrls.filter(url => url?.trim() !== '')
       
       await hotelsService.create(data)
       toast.success('Hotel created successfully')
@@ -210,7 +207,7 @@ export default function CreateHotel() {
                   </label>
                   <button
                     type="button"
-                    onClick={() => appendImage({ imageUrl: '', caption: '' })}
+                    onClick={() => appendImage('')}
                     className="inline-flex items-center px-2 py-1 text-xs font-medium text-primary hover:text-primary/80"
                   >
                     <Plus className="w-3 h-3 mr-1" />
@@ -218,7 +215,7 @@ export default function CreateHotel() {
                   </button>
                 </div>
                 <div className="space-y-3">
-                  {imageFields.map((field, index) => (
+                  {imageFields.map((field: any, index: number) => (
                     <div key={field.id} className="p-3 border border-gray-200 rounded-lg">
                       <div className="flex items-start justify-between mb-2">
                         <span className="text-sm font-medium text-gray-700">Image {index + 1}</span>
@@ -232,20 +229,12 @@ export default function CreateHotel() {
                           </button>
                         )}
                       </div>
-                      <div className="space-y-2">
-                        <input
-                          type="url"
-                          {...register(`images.${index}.imageUrl` as const)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent"
-                          placeholder="https://example.com/image.jpg"
-                        />
-                        <input
-                          type="text"
-                          {...register(`images.${index}.caption` as const)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent"
-                          placeholder="Image caption (optional)"
-                        />
-                      </div>
+                      <input
+                        type="url"
+                        {...register(`imageUrls.${index}` as const)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent"
+                        placeholder="https://example.com/image.jpg"
+                      />
                     </div>
                   ))}
                 </div>

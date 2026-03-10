@@ -25,15 +25,16 @@ export default function CreateActivity() {
 
   const { fields: imageFields, append: appendImage, remove: removeImage } = useFieldArray({
     control,
-    name: 'imageUrls' as any,
-  })
+    // @ts-expect-error - react-hook-form does not support arrays of primitives properly
+    name: 'imageUrls',
+  }) as any
 
   const imageUrl = watch('imageUrl')
 
   const onSubmit = async (data: CreateActivityRequest) => {
     try {
       // Clean up empty image URLs
-      data.imageUrls = data.imageUrls?.filter(url => url?.trim() !== '')
+      data.imageUrls = data.imageUrls.filter(url => url?.trim() !== '')
       
       await activitiesService.create(data)
       toast.success('Activity created successfully')
@@ -196,7 +197,7 @@ export default function CreateActivity() {
                   </button>
                 </div>
                 <div className="space-y-2">
-                  {imageFields.map((field, index) => (
+                  {imageFields.map((field: any, index: number) => (
                     <div key={field.id} className="flex items-center space-x-2">
                       <input
                         type="url"
