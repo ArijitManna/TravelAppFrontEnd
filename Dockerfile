@@ -3,6 +3,14 @@ FROM node:20 AS build
 
 WORKDIR /app
 
+# Build arguments for environment variables
+ARG VITE_API_BASE_URL
+ARG VITE_APP_NAME="TNT Travel"
+
+# Set environment variables from build args
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+ENV VITE_APP_NAME=$VITE_APP_NAME
+
 COPY package*.json ./
 RUN npm install
 
