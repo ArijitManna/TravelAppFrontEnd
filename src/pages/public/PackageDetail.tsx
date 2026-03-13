@@ -182,7 +182,43 @@ export default function PackageDetail() {
                       </div>
                       <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
                         <h3 className="text-base font-bold text-gray-900 mb-2">{day.title}</h3>
-                        <p className="text-gray-700 leading-relaxed text-sm">{day.description}</p>
+                        <p className="text-gray-700 leading-relaxed text-sm mb-3">{day.description}</p>
+                        
+                        {/* Day Images */}
+                        {day.imageUrls && day.imageUrls.length > 0 && (
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-3">
+                            {day.imageUrls.map((imageUrl, imgIndex) => (
+                              <div key={imgIndex} className="relative h-24 rounded-lg overflow-hidden group">
+                                <img
+                                  src={imageUrl}
+                                  alt={`${day.title} - Image ${imgIndex + 1}`}
+                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Meal Information */}
+                        {(day.isBreakfastIncluded || day.isLunchIncluded || day.isDinnerIncluded) && (
+                          <div className="flex flex-wrap gap-2 mt-3">
+                            {day.isBreakfastIncluded && (
+                              <span className="inline-flex items-center px-2 py-1 bg-green-50 text-green-700 rounded text-xs font-medium">
+                                🍳 Breakfast
+                              </span>
+                            )}
+                            {day.isLunchIncluded && (
+                              <span className="inline-flex items-center px-2 py-1 bg-green-50 text-green-700 rounded text-xs font-medium">
+                                🍽️ Lunch
+                              </span>
+                            )}
+                            {day.isDinnerIncluded && (
+                              <span className="inline-flex items-center px-2 py-1 bg-green-50 text-green-700 rounded text-xs font-medium">
+                                🍷 Dinner
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))

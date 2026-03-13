@@ -1,10 +1,11 @@
 import { Package, MapPin, Users, TrendingUp } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { dashboardService, type DashboardStats } from '@/services/dashboardService'
+import { dashboardService, type DashboardStats, type RecentActivity } from '@/services/dashboardService'
 import { toast } from 'sonner'
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -14,13 +15,35 @@ export default function AdminDashboard() {
   const fetchDashboardData = async () => {
     try {
       setLoading(true)
-      const data = await dashboardService.getStats()
-      setStats(data)
+      const [statsData, activitiesData] = await Promise.all([
+        dashboardService.getStats(),
+        dashboardService.getRecentActivity()
+      ])
+      setStats(statsData)
+      setRecentActivities(activitiesData)
     } catch (error: any) {
       console.error('Error fetching dashboard data:', error)
       toast.error('Failed to load dashboard data')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const getActivityColor = (type: string) => {
+    switch (type) {
+      case 'package': return 'bg-green-500'
+      case 'destination': return 'bg-blue-500'
+      case 'booking': return 'bg-purple-500'
+      default: return 'bg-gray-500'
+    }
+  }
+
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case 'package': return Package
+      case 'destination': return MapPin
+      case 'booking': return Users
+      default: return Package
     }
   }
 
@@ -129,29 +152,21 @@ export default function AdminDashboard() {
 
         <div className="rounded-lg bg-white p-6 shadow border border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-          <div className="space-y-3 text-sm">
-            <div className="flex items-start">
-              <div className="w-2 h-2 mt-2 rounded-full bg-green-500 mr-3"></div>
-              <div>
-                <p className="font-medium text-gray-900">New package created</p>
-                <p className="text-gray-500">Maldives Paradise • 2 hours ago</p>
-              </div>
+          {recentActivities.length > 0 ? (
+            <div className="space-y-3 text-sm">
+              {recentActivities.map((activity) => (
+                <div key={activity.id} className="flex items-start">
+                  <div className={`w-2 h-2 mt-2 rounded-full ${getActivityColor(activity.type)} mr-3`}></div>
+                  <div>
+                    <p className="font-medium text-gray-900">{activity.title}</p>
+                    <p className="text-gray-500">{activity.subtitle} • {activity.timestamp}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="flex items-start">
-              <div className="w-2 h-2 mt-2 rounded-full bg-blue-500 mr-3"></div>
-              <div>
-                <p className="font-medium text-gray-900">Destination updated</p>
-                <p className="text-gray-500">Bali, Indonesia • 5 hours ago</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <div className="w-2 h-2 mt-2 rounded-full bg-purple-500 mr-3"></div>
-              <div>
-                <p className="font-medium text-gray-900">New booking received</p>
-                <p className="text-gray-500">Swiss Alps Tour • 1 day ago</p>
-              </div>
-            </div>
-          </div>
+          ) : (
+            <p className="text-sm text-gray-500">No recent activities</p>
+          )}
         </div>
       </div>
     </div>
