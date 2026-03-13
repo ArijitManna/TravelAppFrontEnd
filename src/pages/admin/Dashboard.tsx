@@ -1,12 +1,70 @@
 import { Package, MapPin, Users, TrendingUp } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { dashboardService, type DashboardStats } from '@/services/dashboardService'
+import { toast } from 'sonner'
 
 export default function AdminDashboard() {
-  const stats = [
-    { name: 'Total Destinations', value: '24', icon: MapPin, change: '+4.75%', changeType: 'positive' },
-    { name: 'Total Packages', value: '156', icon: Package, change: '+12.5%', changeType: 'positive' },
-    { name: 'Active Bookings', value: '89', icon: Users, change: '+8.2%', changeType: 'positive' },
-    { name: 'Revenue (MTD)', value: '$124.5K', icon: TrendingUp, change: '+23.1%', changeType: 'positive' },
-  ]
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchDashboardData()
+  }, [])
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true)
+      const data = await dashboardService.getStats()
+      setStats(data)
+    } catch (error: any) {
+      console.error('Error fetching dashboard data:', error)
+      toast.error('Failed to load dashboard data')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const dashboardCards = stats ? [
+    { 
+      name: 'Total Destinations', 
+      value: stats.totalDestinations.toString(), 
+      icon: MapPin, 
+      change: stats.destinationsChange || '+0%', 
+      changeType: 'positive' 
+    },
+    { 
+      name: 'Total Packages', 
+      value: stats.totalPackages.toString(), 
+      icon: Package, 
+      change: stats.packagesChange || '+0%', 
+      changeType: 'positive' 
+    },
+    { 
+      name: 'Active Bookings', 
+      value: stats.activeBookings.toString(), 
+      icon: Users, 
+      change: stats.bookingsChange || '+0%', 
+      changeType: 'positive' 
+    },
+    { 
+      name: 'Revenue (MTD)', 
+      value: `$${(stats.revenue / 1000).toFixed(1)}K`, 
+      icon: TrendingUp, 
+      change: stats.revenueChange || '+0%', 
+      changeType: 'positive' 
+    },
+  ] : []
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -19,7 +77,7 @@ export default function AdminDashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-        {stats.map((stat) => {
+        {dashboardCards.map((stat) => {
           const Icon = stat.icon
           return (
             <div
