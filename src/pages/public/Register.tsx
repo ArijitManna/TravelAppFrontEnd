@@ -18,12 +18,20 @@ export default function Register() {
   const password = watch('password')
 
   const onSubmit = async (data: RegisterRequest & { confirmPassword: string }) => {
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+    console.log('🚀 [REGISTER PAGE] Form submitted')
+    console.log('🚀 [REGISTER PAGE] Environment:', import.meta.env.MODE)
+    console.log('🚀 [REGISTER PAGE] VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL)
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+    
     try {
       const { confirmPassword, ...registerData } = data
       await authService.register(registerData)
       toast.success('Registration successful! Welcome aboard!')
       navigate(ROUTES.HOME)
     } catch (error: any) {
+      console.error('❌ [REGISTER PAGE] Error:', error)
+      console.error('❌ [REGISTER PAGE] Error response:', error.response)
       toast.error(error.response?.data?.message || 'Registration failed. Please try again.')
     }
   }

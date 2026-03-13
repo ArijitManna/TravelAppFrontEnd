@@ -4,7 +4,13 @@ import { STORAGE_KEYS } from '@/config/constants'
 
 export const authService = {
   async register(data: RegisterRequest): Promise<AuthResponse> {
+    console.log('🔐 [AUTH SERVICE] Register called')
+    console.log('🔐 [AUTH SERVICE] Data:', { ...data, password: '***' })
+    console.log('🔐 [AUTH SERVICE] Endpoint: /api/Auth/register')
+    
     const response = await apiClient.post<AuthResponse>('/api/Auth/register', data)
+    
+    console.log('✅ [AUTH SERVICE] Register successful')
     this.saveAuth(response.data)
     return response.data
   },
