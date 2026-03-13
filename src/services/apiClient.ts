@@ -25,7 +25,7 @@ class ApiClient {
       (config) => {
         console.log('📤 [API REQUEST] URL:', config.url)
         console.log('📤 [API REQUEST] Base URL:', config.baseURL)
-        console.log('📤 [API REQUEST] Full URL:', config.baseURL + config.url)
+        console.log('📤 [API REQUEST] Full URL:', (config.baseURL || '') + (config.url || ''))
         console.log('📤 [API REQUEST] Method:', config.method?.toUpperCase())
         
         const token = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN)
