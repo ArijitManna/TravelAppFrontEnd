@@ -129,10 +129,22 @@ export default function EditPackage() {
       data.inclusions = data.inclusions?.filter(inc => inc.inclusionType?.trim() !== '')
       data.highlights = data.highlights?.filter(hl => hl.highlight?.trim() !== '')
 
+      // Ensure boolean fields are properly set
+      data.isFeatured = Boolean(data.isFeatured)
+      data.isActive = Boolean(data.isActive)
+
+      console.log('📦 Updating package with data:', {
+        id,
+        isFeatured: data.isFeatured,
+        isActive: data.isActive,
+        fullData: data
+      })
+
       await adminPackagesService.update(Number(id), data)
       toast.success('Package updated successfully')
       navigate(ROUTES.ADMIN_PACKAGES)
     } catch (error) {
+      console.error('❌ Failed to update package:', error)
       toast.error('Failed to update package')
     }
   }

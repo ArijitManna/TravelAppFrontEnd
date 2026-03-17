@@ -10,32 +10,37 @@ export default function PublicLayout() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
+      <header className="sticky top-0 z-40 bg-gradient-to-r from-cyan-100 to-cyan-50 border-b border-cyan-300 shadow-sm">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link to={ROUTES.HOME} className="flex items-center space-x-2">
-              <Package className="w-8 h-8 text-primary" />
-              <span className="text-xl font-bold text-gray-900">TNT Travel</span>
+            <Link to={ROUTES.HOME} className="flex items-center space-x-3 group">
+              <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                <Package className="w-7 h-7 text-white" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold text-gray-800">TNT Travel</span>
+                <span className="text-xs text-gray-600 uppercase tracking-wide">Explore the Wonderful World</span>
+              </div>
             </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
               <Link
                 to={ROUTES.HOME}
-                className="text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                className="text-base font-semibold text-gray-700 hover:text-cyan-600 transition-colors"
               >
                 Home
               </Link>
               <Link
                 to={ROUTES.DESTINATIONS}
-                className="text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                className="text-base font-semibold text-gray-700 hover:text-cyan-600 transition-colors"
               >
-                Destinations
+                Destination
               </Link>
               <Link
                 to={ROUTES.PACKAGES}
-                className="text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                className="text-base font-semibold text-gray-700 hover:text-cyan-600 transition-colors"
               >
                 Packages
               </Link>
@@ -45,13 +50,13 @@ export default function PublicLayout() {
             <div className="flex items-center space-x-4">
               {isAuthenticated ? (
                 <>
-                  <span className="text-sm text-gray-700">
+                  <span className="text-sm font-medium text-gray-700">
                     Hi, {user?.fullName}
                   </span>
                   {user?.role === 'admin' && (
                     <Link
                       to={ROUTES.ADMIN_DASHBOARD}
-                      className="text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                      className="text-base font-semibold text-gray-700 hover:text-cyan-600 transition-colors"
                     >
                       Admin Panel
                     </Link>
@@ -61,7 +66,7 @@ export default function PublicLayout() {
                       authService.logout()
                       window.location.href = ROUTES.LOGIN
                     }}
-                    className="text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                    className="text-base font-semibold text-gray-700 hover:text-red-600 transition-colors"
                   >
                     Logout
                   </button>
@@ -70,13 +75,13 @@ export default function PublicLayout() {
                 <>
                   <Link
                     to={ROUTES.LOGIN}
-                    className="text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                    className="text-base font-semibold text-gray-700 hover:text-cyan-600 transition-colors"
                   >
                     Login
                   </Link>
                   <Link
                     to={ROUTES.REGISTER}
-                    className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors"
+                    className="px-6 py-2.5 text-base font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-200"
                   >
                     Sign Up
                   </Link>

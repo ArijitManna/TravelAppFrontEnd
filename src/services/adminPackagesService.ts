@@ -8,7 +8,9 @@ export const adminPackagesService = {
   },
 
   async update(id: number, data: UpdatePackageRequest): Promise<Package> {
+    console.log('🔄 adminPackagesService.update called:', { id, isFeatured: data.isFeatured, isActive: data.isActive })
     const response = await apiClient.put<Package>(`/api/admin/packages/${id}`, data)
+    console.log('✅ adminPackagesService.update response:', response.data)
     return response.data
   },
 
