@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { LogIn, Facebook, Twitter, Linkedin } from 'lucide-react'
+import { Facebook, Linkedin } from 'lucide-react'
 import { authService } from '@/services/authService'
 import { toast } from 'sonner'
 import type { LoginRequest } from '@/types'
-import { ROUTES, APP_NAME } from '@/config/constants'
+import { ROUTES } from '@/config/constants'
 
 export default function Login() {
   const navigate = useNavigate()

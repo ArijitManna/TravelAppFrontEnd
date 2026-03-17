@@ -58,10 +58,6 @@ export default function Home() {
 
     // Pause on hover
     const handleMouseEnter = () => clearInterval(intervalId)
-    const handleMouseLeave = () => {
-      const newIntervalId = setInterval(autoScroll, 30)
-      return newIntervalId
-    }
 
     carousel.addEventListener('mouseenter', handleMouseEnter)
 

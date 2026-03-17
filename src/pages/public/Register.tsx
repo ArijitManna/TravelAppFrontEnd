@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { UserPlus, Facebook, Linkedin } from 'lucide-react'
+import { Facebook, Linkedin } from 'lucide-react'
 import { authService } from '@/services/authService'
 import { toast } from 'sonner'
 import type { RegisterRequest } from '@/types'
